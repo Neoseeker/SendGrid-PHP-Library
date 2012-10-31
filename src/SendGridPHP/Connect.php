@@ -19,16 +19,17 @@
  *
  *
  * @author Alon Ben David - CoolGeex.com
- * 
+ *
  * All the methods returns an array of data or one string / int
  * If false returned you can run getLastResponseError() to see the error information
  * If error information == NULL then no error accrued (like deleting a record returns 0 records deleted if no record found)
- * 
+ *
  * CHECK sample.php for list of methods, variables and code samples
- * 
+ *
 */
+namespace SendGridPHP;
 
-class sendgridConnect {
+class Connect {
 
 	private $apiEndpoint;
 	private $authUser;
@@ -77,7 +78,7 @@ class sendgridConnect {
 		$this->_curl_ssl_verify = $curl_ssl_verify;
 	}
 
-		
+
 	/**
 	 * Makes a call to an API
 	 *
@@ -87,12 +88,12 @@ class sendgridConnect {
 	 * @return array The parsed response, or NULL if there was an error
 	 */
 	protected function makeApiCall($url, $postData = NULL, $method = 'POST') {
-		
+
 		//if(!$postData)return false;
-		
+
 		$postData['api_user'] = $this->authUser;
 		$postData['api_key']  = $this->authKey;
-		
+
 		$this->debugCall('DEBUG - Post Data: ' , $postData);
 
 		$url.= ".json";
@@ -100,9 +101,9 @@ class sendgridConnect {
 		$jsonUrl = $this->apiEndpoint . '/' . $url;
 		// Generate curl request
 		$session = curl_init($jsonUrl);
-		
+
 		$this->debugCall('DEBUG - Curl Session: ' , $session);
-		
+
 		//Set to FALSE to stop cURL from verifying the peer's certificate (needed for local hosts development mostly)
 		if(!$this->_curl_ssl_verify) curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
 
@@ -120,30 +121,30 @@ class sendgridConnect {
 		// obtain response
 		$jsonResponse = curl_exec($session);
 		curl_close($session);
-		
+
 		$this->debugCall('DEBUG - Json Response: ' , $jsonResponse);
-		
+
 		$results  = json_decode ( $jsonResponse, TRUE );
-		
+
 		$this->debugCall('DEBUG - Results: ' , $results);
-		
+
 		$this->lastResponseError = isset($results['error']) ? $results['error'] : NULL;
 
 		return $this->lastResponseError ? false : $results;
 	}
-	
-	
+
+
 	/**
 	 * Makes a print out of every step of makeApiCall for DEBUGGING
 	 *
-	 * @param string $text The text to show before the actual debug information EX: DEBUG - Results: 
+	 * @param string $text The text to show before the actual debug information EX: DEBUG - Results:
 	 * @param string / array $data the actual debug data to show
 	 */
 	private function debugCall($text = 'DEBUG : ' , $data){
 		if(!$this->_debug) return;
-		
+
 		$newLine = isset($_SERVER['HTTP_USER_AGENT']) ? "<br/>" : "\n";
-			
+
 		echo $newLine . $text;
 		//print_r($data);
 		if(is_array($data)){
@@ -153,7 +154,7 @@ class sendgridConnect {
 			}echo $newLine;
 		}else echo $data . $newLine;
 	}
-	
+
 	public function getLastResponseError() {
 		return $this->lastResponseError;
 	}

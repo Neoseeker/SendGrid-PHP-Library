@@ -1,6 +1,3 @@
-
-sendgrid/core/.DS_Store
-
-sendgrid/.DS_Store
-
+src/SendGridPHP/.DS_Store
 .DS_Store
+.idea/*

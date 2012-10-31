@@ -19,18 +19,18 @@
  *
  *
  * @author Alon Ben David - CoolGeex.com
- * 
+ *
  * All the methods returns an array of data or one string / int
  * If false returned you can run getLastResponseError() to see the error information
  * If error information == NULL then no error accrued (Ex: deleting a record returns 0 records deleted if no record found)
  *
  * methods that ends with _helper are not supported directly by sendgrid (they are help functions - Ex: newsletter_lists_email_edit_helper)
- * 
+ *
 */
 
 require_once "sendgrid/newsletter.php";
 
-$sg_user = 'YOUR_SEND_GRID_USER'; 
+$sg_user = 'YOUR_SEND_GRID_USER';
 $sg_api_key = 'YOUR_SEND_GRID_PASSWORD';
 
 //Creates a new SendGrid Newsletter API object to make calls with
@@ -38,8 +38,8 @@ $sg_api_key = 'YOUR_SEND_GRID_PASSWORD';
  * YOU CAN ALSO SET $debug to true for DEBUGGING and $curl_ssl_verify to false for disabling cert verification
  * ($user, $key , $debug = false , $curl_ssl_verify = true)
  *
-*/ 
-$sendgrid = new sendgridNewsletter($sg_user,$sg_api_key); 
+*/
+$sendgrid = new \SendGridPHP\Newsletter($sg_user,$sg_api_key);
 
 $text = 'Newsletter text goes here';
 $html = '<div>Newsletter html goes here</div>';
@@ -185,19 +185,19 @@ $sendgrid->newsletter_identity_add($identity , $name , $email , $address , $city
  * @param string $zip	- Specify the zip code to be used for this Identity.
  * @param string $country	- Specify the country code to be used for this Identity.
  */
-$sendgrid->newsletter_identity_edit($identity , $newidentity , $name , $email , $address , $city , $state , $zip , $country); 
+$sendgrid->newsletter_identity_edit($identity , $newidentity , $name , $email , $address , $city , $state , $zip , $country);
 /**
  * Retrieve information associated with a particular Identity.
  * @param string $identity	- Retrieve contents of the specified Identity.
  */
-$sendgrid->newsletter_identity_get($identity); 
+$sendgrid->newsletter_identity_get($identity);
 
 /**
  * List all Identities on your account, or check if a particular Identity exists.
  * @param string $identity	- Check for this particular Identity. (To list all Identities on your account exclude this parameter);
  */
 $sendgrid->newsletter_identity_list($identity = '');
-//$r = $sendgrid->newsletter_identity_list(); 
+//$r = $sendgrid->newsletter_identity_list();
 //print_r($r);
 /**
  * Remove an Identity from your account.
@@ -216,14 +216,14 @@ $sendgrid->newsletter_recipients_add($name , $list);
  * Retrieve the Recipient Lists attached to an existing Newsletter.
  * @param string $name	- Retrieve the Recipient Lists of an existing Newsletter.
  */
-$sendgrid->newsletter_recipients_get($name); 
+$sendgrid->newsletter_recipients_get($name);
 
 /**
  * Add one or more Recipient List to a Newsletter.
  * @param string $name	- Newsletter to remove Recipient Lists from.
  * @param string $list	- Recipient Lists to remove.
  */
-$sendgrid->newsletter_recipients_delete($name , $list); 
+$sendgrid->newsletter_recipients_delete($name , $list);
 
 /**
  * Create a new schedule event.
