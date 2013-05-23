@@ -5,8 +5,7 @@
 	"license": "MIT",
 	"authors": [
 		{
-			"name": "Alon Ben David",
-			"email": ""
+			"name": "Alon Ben David"
 		}
 	],
 	"require": {
