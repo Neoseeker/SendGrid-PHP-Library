@@ -200,10 +200,22 @@ class Newsletter extends Connect {
 	public function newsletter_lists_email_add($list , $data) {
 		$url = "newsletter/lists/email/add";
 
+        /**
+         * SendGrid, in their wisdom, requires that we submit each recipient in the list
+         * as a separate parameter.
+         *
+         * Since PHP does not support multiple params with the same name, we stuff them into an array.
+         *
+         * SendGridPHP\Connect's makeApiCall method removes the numerical indexes in the generated querystring.
+         */
+        array_walk($data, function(&$row) {
+            $row = json_encode($row);
+        });
+
 		$postData = array(
 			'list' => $list,
-			'data' => json_encode($data),
-		  );
+			'data' => $data,
+        );
 
 		$results = $this->makeApiCall ( $url , $postData );
 

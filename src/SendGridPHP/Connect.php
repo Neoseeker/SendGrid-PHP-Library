@@ -107,7 +107,18 @@ class Connect {
 		//Set to FALSE to stop cURL from verifying the peer's certificate (needed for local hosts development mostly)
 		if(!$this->_curl_ssl_verify) curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
 
-		// Tell curl to use HTTP POST
+        $postData = http_build_query($postData);
+
+        $this->debugCall('DEBUG - Original post querystring: ', urldecode($postData));
+
+        // Replace numerically indexed arrays, such as data[1], data[2], etc. with data[], data[], data[].
+        // This is needed, for instance, when we try to submit multiple email addresses to a List.
+        // The postdata is url_encoded at this point, so replace using %5B = [, %5D = ].
+        $postData = preg_replace('/%5B\d+%5D/', '%5B%5D', $postData);
+
+        $this->debugCall('DEBUG - Replaced post querystring: ', urldecode($postData));
+
+        // Tell curl to use HTTP POST
 		curl_setopt ( $session, CURLOPT_CUSTOMREQUEST, strtoupper ( $method ) );
 		// Tell curl that this is the body of the POST
 		curl_setopt ($session, CURLOPT_POSTFIELDS, $postData);
